@@ -19,7 +19,7 @@ def type(args):
         locations = os.environ.get("PATH", "").split(os.pathsep)
         for location in locations:
             l = os.path.join(location, cmd)
-            if os.path.exists(l):
+            if os.path.exists(l) and os.access(l, os.X_OK):
                 print(f"{cmd} is {l}")
                 return
         print(f"{cmd}: not found")
