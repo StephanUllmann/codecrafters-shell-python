@@ -1,3 +1,4 @@
+import os
 import sys
 
 
@@ -13,7 +14,14 @@ def type(args):
     cmd = args[0]
     if cmd in builtins:
         print(f"{cmd} is a shell builtin")
+
     else:
+        locations = os.environ.get("PATH", "").split(os.pathsep)
+        for location in locations:
+            l = os.path.join(location, cmd)
+            if os.path.exists(l):
+                print(f"{cmd} is {l}")
+                return
         print(f"{cmd}: not found")
 
 
