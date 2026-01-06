@@ -46,7 +46,7 @@ def main():
             program = find_program(cmd)
             if program is None:
                 sys.stdout.write(f"{cmd}: command not found\n")
-            subprocess.run([program, *args])
+            subprocess.run([cmd, *args])
         else:
             builtins[cmd](args)
 
