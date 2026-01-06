@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 
+cwd = os.getcwd()
+
 
 def echo(message):
     print(*message)
@@ -23,6 +25,10 @@ def type(args):
         print(f"{cmd}: not found")
 
 
+def pwd(_):
+    print(cwd)
+
+
 def find_program(name):
     locations = os.environ.get("PATH", "").split(os.pathsep)
     for location in locations:
@@ -32,7 +38,7 @@ def find_program(name):
     return None
 
 
-builtins = {"echo": echo, "exit": exit, "type": type}
+builtins = {"echo": echo, "exit": exit, "pwd": pwd, "type": type}
 
 
 def main():
