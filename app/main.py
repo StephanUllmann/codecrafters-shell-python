@@ -29,6 +29,15 @@ def pwd(_):
     print(cwd)
 
 
+def cd(args):
+    change_path = args[-1]
+    first_char = change_path[0]
+    match first_char:
+        case "/":
+            if os.path.exists(change_path) and os.path.isdir(change_path):
+                cwd = change_path
+
+
 def find_program(name):
     locations = os.environ.get("PATH", "").split(os.pathsep)
     for location in locations:
@@ -38,7 +47,7 @@ def find_program(name):
     return None
 
 
-builtins = {"echo": echo, "exit": exit, "pwd": pwd, "type": type}
+builtins = {"cd": cd, "echo": echo, "exit": exit, "pwd": pwd, "type": type}
 
 
 def main():
