@@ -42,13 +42,14 @@ def main():
         cmd = user_input[0].lower()
         args = user_input[1:]
 
-        if cmd not in builtins:
+        if cmd in builtins:
+            builtins[cmd](args)
+        else:
             program = find_program(cmd)
             if program is None:
                 sys.stdout.write(f"{cmd}: command not found\n")
-            subprocess.run([cmd, *args])
-        else:
-            builtins[cmd](args)
+            else:
+                subprocess.run([cmd, *args])
 
 
 if __name__ == "__main__":
