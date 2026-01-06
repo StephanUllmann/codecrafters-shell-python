@@ -30,12 +30,15 @@ def pwd(_):
 
 
 def cd(args):
+    global cwd
     change_path = args[-1]
     first_char = change_path[0]
     match first_char:
         case "/":
             if os.path.exists(change_path) and os.path.isdir(change_path):
                 cwd = change_path
+            else:
+                print(f"cd: {change_path}: No such file or directory")
 
 
 def find_program(name):
