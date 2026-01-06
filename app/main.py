@@ -30,15 +30,36 @@ def pwd(_):
 
 
 def cd(args):
-    global cwd
-    change_path = args[-1]
-    first_char = change_path[0]
+    def change_to(change_path):
+        global cwd
+        if os.path.exists(change_path) and os.path.isdir(change_path):
+            cwd = change_path.removesuffix(os.sep)
+        else:
+            print(f"cd: {change_path}: No such file or directory")
+
+    change_path: str = args[-1] if len(args) > 0 else "~"
+    first_char: str = change_path[0]
     match first_char:
-        case "/":
-            if os.path.exists(change_path) and os.path.isdir(change_path):
-                cwd = change_path
+        case os.sep:
+            pass
+        case "~":
+            change_path = os.environ.get("HOME", "/")
+        case ".":
+            if "./" == change_path[:2]:
+                change_path = os.path.join(cwd, change_path[2:])
             else:
-                print(f"cd: {change_path}: No such file or directory")
+                change_path = change_path.split(os.sep)
+                temp_cwd = cwd.split(os.sep)
+                while len(change_path) > 0 and ".." == change_path[0]:
+                    temp_cwd.pop()
+                    change_path.pop(0)
+                change_path: str = os.path.join(
+                    os.sep.join(temp_cwd), os.sep.join(change_path)
+                )
+        case _:
+            change_path = os.path.join(cwd, change_path)
+
+    change_to(change_path)
 
 
 def find_program(name):
