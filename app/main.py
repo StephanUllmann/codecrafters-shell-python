@@ -1,4 +1,5 @@
 import os
+import string
 import subprocess
 import sys
 
@@ -30,12 +31,7 @@ def pwd(_):
 
 
 def cd(args):
-    def change_to(change_path):
-        global cwd
-        if os.path.exists(change_path) and os.path.isdir(change_path):
-            cwd = change_path.removesuffix(os.sep)
-        else:
-            print(f"cd: {change_path}: No such file or directory")
+    global cwd
 
     change_path: str = args[-1] if len(args) > 0 else "~"
     first_char: str = change_path[0]
@@ -59,7 +55,10 @@ def cd(args):
         case _:
             change_path = os.path.join(cwd, change_path)
 
-    change_to(change_path)
+    if os.path.exists(change_path) and os.path.isdir(change_path):
+        cwd = change_path.removesuffix(os.sep)
+    else:
+        print(f"cd: {change_path}: No such file or directory")
 
 
 def find_program(name):
@@ -74,9 +73,27 @@ def find_program(name):
 builtins = {"cd": cd, "echo": echo, "exit": exit, "pwd": pwd, "type": type}
 
 
+def parse_input(s: str) -> list[str]:
+    out: list[str] = []
+    "sdfs".split()
+    curr = ""
+    is_literal = False
+    for char in s:
+        if not is_literal and char in string.whitespace:
+            out.append(curr)
+            curr = ""
+        elif "'" == char:
+            is_literal = not is_literal
+        else:
+            curr += char
+
+    out.append(curr)
+    return out
+
+
 def main():
     while True:
-        user_input = input("$ ").split()
+        user_input = parse_input(input("$ "))
 
         cmd = user_input[0].lower()
         args = user_input[1:]
