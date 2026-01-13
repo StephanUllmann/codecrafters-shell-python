@@ -80,7 +80,7 @@ def parse_input(s: str) -> list[str]:
     is_literal = False
     for char in s:
         if not is_literal and char in string.whitespace:
-            out.append(curr)
+            curr and out.append(curr)
             curr = ""
         elif "'" == char:
             is_literal = not is_literal
