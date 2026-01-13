@@ -77,13 +77,16 @@ def parse_input(s: str) -> list[str]:
     out: list[str] = []
     "sdfs".split()
     curr = ""
-    is_literal = False
+    is_single_quote = False
+    is_double_quote = False
     for char in s:
-        if not is_literal and char in string.whitespace:
+        if not is_single_quote and not is_double_quote and char in string.whitespace:
             curr and out.append(curr)
             curr = ""
-        elif "'" == char:
-            is_literal = not is_literal
+        elif "'" == char and not is_double_quote:
+            is_single_quote = not is_single_quote
+        elif '"' == char:
+            is_double_quote = not is_double_quote
         else:
             curr += char
 
